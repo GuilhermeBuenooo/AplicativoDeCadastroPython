@@ -1,0 +1,251 @@
+<DrawerClickableItem@MDNavigationDrawerItem>
+    focus_color: "#e7e4c0"
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    ripple_color: "#c5bdd2"
+    selected_color: "#0c6c4d"
+
+
+<DrawerLabelItem@MDNavigationDrawerItem>
+    text_color: "#4a4939"
+    icon_color: "#ffffff"
+    focus_behavior: False
+    selected_color: "#4a4939"
+    _no_ripple_effect: True
+
+
+MDScreen:
+
+    MDNavigationLayout:
+
+        MDScreenManager:
+            id: gerenciador
+            Login:
+            Registrar:
+            Principal:
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+            size_hint_x: .7
+
+            MDNavigationDrawerMenu:
+
+                MDNavigationDrawerHeader:
+                    title: "Menu"
+                    title_color: "#4a4939"
+                    text: "Configurações"
+                    spacing: "4dp"
+                    padding: "12dp", 0, 0, "56dp"
+
+                DrawerClickableItem:
+                    text: 'Tema: Light'
+
+                    icon:'lightbulb'
+
+                    on_release:
+                        self.theme_cls.theme_style = 'Dark' if self.theme_cls.theme_style == 'Light' else 'Light'
+                        self.icon = 'lightbulb' if self.icon =='lightbulb-off-outline' else 'lightbulb-off-outline'
+                        self.text = 'Tema: Light' if self.text == 'Tema: Dark' else 'Tema: Dark'
+
+
+                MDNavigationDrawerDivider:
+
+                DrawerLabelItem:
+                    text: 'Entre em contato'
+                DrawerLabelItem:
+                    text: 'tel: (xx) xxxxx - xxxx'
+
+
+
+
+<Login>:
+    name: 'login'
+    BoxLayout:
+
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: 'Sistema de Login'
+            left_action_items:[["menu", lambda x: app.root.ids.nav_drawer.set_state("open")]]
+            elevation:10
+            size_hint_y:.13
+
+        FloatLayout:
+            MDLabel:
+                text: 'Logo'
+                font_size: '60sp'
+                pos_hint:{ 'center_y':.8}
+                halign: 'center'
+
+
+            MDTextField:
+                id: usuario
+                hint_text: 'Usuário'
+                pos_hint:{'center_x':.5, 'center_y':.6}
+                size_hint_x: .9
+
+            MDTextField:
+                id: senha
+                hint_text: 'Senha'
+                pos_hint:{'center_x':.5, 'center_y':.5}
+                size_hint_x:.9
+                password: True
+
+            MDRaisedButton:
+                text: 'Registrar-se'
+                pos_hint:{'center_x':.27, 'center_y':.4}
+                size_hint_x: .44
+                size_hint_y: .1
+                on_release: root.parent.current = 'registrar'
+
+            MDRaisedButton:
+                text: 'Login'
+                pos_hint:{'center_x':.73, 'center_y':.4}
+                size_hint_x: .44
+                size_hint_y: .1
+                on_release: app.logar(root.ids.usuario.text, root.ids.senha.text)
+
+            MDLabel:
+                pos_hint:{'center_y':.3}
+                text: 'Esqueceu sua senha?'
+                halign: 'center'
+
+            MDTextButton:
+                text: 'Clique aqui!'
+                color: 1, .5, 0, 1
+                pos_hint:{'center_x':.5, 'center_y':.2}
+                on_release: root.abrir_card()
+
+
+<CardPopCadastro>:
+    orientation: 'vertical'
+    pos_hint:{'center_x': .5, 'center_y': .48}
+    size_hint_x: .9
+    size_hint_y: .35
+    MDTopAppBar:
+        title: 'Alerta'
+        right_action_items: [['close', lambda x: root.fechar()]]
+        left_action_items: [['alert', lambda x: root.fechar()]]
+    MDBoxLayout:
+        size_hint_y:.2
+        padding: [25, 0, 25, 0]
+        orientation:'vertical'
+        FloatLayout:
+            MDLabel:
+                id: mensagem
+                pos_hint:{'center_x':.5, 'center_y':.5}
+                halign: 'center'
+
+<CardSenha>:
+    orientation: 'vertical'
+
+    pos_hint:{'center_x': .5, 'center_y': .5}
+    MDTopAppBar:
+        title: 'Redefinir Senha'
+        right_action_items: [['close', lambda x: root.fechar()]]
+    MDBoxLayout:
+        size_hint_y:.2
+        padding: [25, 0, 25, 0]
+        orientation:'vertical'
+
+        MDFloatLayout:
+
+
+            MDTextField:
+                id: user
+                hint_text: 'Usuario'
+                pos_hint:{'center_x': .5, 'center_y': .8}
+                size_hint_x:.9
+
+
+            MDTextField:
+                id: senha
+                hint_text: 'Nova Senha'
+                pos_hint:{'center_x': .5, 'center_y': .6}
+                size_hint_x:.9
+                password: True
+
+
+            MDTextField:
+                id: confirmacao_senha
+                hint_text: 'Confirmar a nova senha'
+                pos_hint:{'center_x': .5, 'center_y': .4}
+                size_hint_x:.9
+                password: True
+
+            MDRaisedButton:
+                text:'Redefinir'
+                pos_hint:{'center_x': .5, 'center_y': .2}
+                size_hint_x:.9
+                on_release:app.redefinir_senha(root.ids.user.text,root.ids.senha.text,root.ids.confirmacao_senha.text, root)
+
+
+
+<Principal>:
+    name: 'principal'
+
+    MDFloatLayout:
+        MDLabel:
+            text:'Você está logado'
+            pos_hint:{'center_y': .5}
+            halign: 'center'
+            size_hint_y: .3
+        MDRaisedButton:
+            text:'retornar a tela de login'
+            pos_hint:{'center_x': .5,'center_y': .3}
+            on_release: root.login()
+
+<Registrar>:
+    name: 'registrar'
+
+    MDBoxLayout:
+        orientation:'vertical'
+        MDTopAppBar:
+            title: 'Cadastro'
+            left_action_items: [["arrow-left-bold", lambda x: root.login()]]
+
+
+        MDFloatLayout:
+            MDTextField:
+                id: user
+                hint_text:'Usuário'
+                size_hint_x: .9
+                pos_hint: {'center_x':.5,'center_y':.8}
+                helper_text: 'Defina o seu nome de usuario' if self.text == '' else ''
+                required: True if self.text == '' else ''
+
+            MDTextField:
+                id: senha
+                hint_text:'Senha'
+                password:True
+                size_hint_x: .9
+                pos_hint: {'center_x':.5,'center_y':.65}
+                max_text_length: 15
+                helper_text: 'A senha deve conter entre 6 e 15 caractere' if self.text == '' else ''
+                required: True if self.text == '' else False
+
+            MDTextField:
+                id: confirmacao_senha
+                hint_text:'Confirme a Senha'
+                password:True
+                size_hint_x: .9
+                pos_hint: {'center_x':.5,'center_y':.5}
+                max_text_length: 15
+                helper_text: 'Senhas Diferentes' if self.text != root.ids.senha.text else ''
+                required: True if self.text != root.ids.senha.text else False
+
+            MDRaisedButton:
+                text: 'Cancelar'
+                pos_hint: {'center_x': .262, 'center_y': .3}
+                size_hint_x:.44
+                size_hint_y:.1
+                on_release: root.login()
+
+            MDRaisedButton:
+                text: 'Enviar'
+                pos_hint: {'center_x': .738, 'center_y': .3}
+                size_hint_x:.44
+                size_hint_y:.1
+                on_release: app.registrar(root.ids.user.text,root.ids.senha.text,root.ids.confirmacao_senha.text)
+
